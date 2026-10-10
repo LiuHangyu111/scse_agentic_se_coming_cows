@@ -1,0 +1,22 @@
+{
+  "strategy": "forward, left, right, stop",
+  "decisions": [
+    {
+      "condition": "avoid_obstacles",
+      "action": "FORWARD"
+    },
+    {
+      "condition": "avoid_obstacles",
+      "action": "LEFT"
+    },
+    {
+      "condition": "avoid_obstacles",
+      "action": "RIGHT"
+    },
+    {
+      "condition": "safe_stop",
+      "action": "STOP"
+    }
+  ],
+  "stop_condition": "no direction is safe"
+}
