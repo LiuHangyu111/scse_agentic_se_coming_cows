@@ -56,3 +56,35 @@ For the four visual runs, activate `.venv` first so the unchanged shell script
 uses the correct Python interpreter. IR-SIM reports use 300 maximum steps and
 count a successful run as efficient when it takes at most 200 steps, as defined
 by the supplied simulator.
+
+## Testing assignment
+
+Level 1 smoke tests run the real agents against the real local model, one after
+another, and each one saves and displays its artifact:
+
+```bash
+.venv/bin/python test_analyst.py     # -> artifacts/requirements.json
+.venv/bin/python test_planner.py     # -> artifacts/plan.json
+.venv/bin/python test_developer.py   # -> generated/navigation_logic.py
+```
+
+These three are standalone runners, so `pytest.ini` and `conftest.py` keep them
+out of `pytest` auto-collection. Level 2 behavioural testing is `pytest -q`, and
+`verify_tests_detect_bug.py` checks that those tests are actually able to fail:
+it injects three separate bugs into `generated/navigation_logic.py`, confirms the
+suite turns red, then restores the file and verifies its SHA-256 is unchanged.
+
+## Windows notes
+
+```powershell
+uv venv --python 3.12 .venv
+$env:UV_LINK_MODE = "copy"   # required when the project sits in a OneDrive folder
+uv pip install --python .\.venv\Scripts\python.exe -r requirements-integration.txt
+$env:QWEN_MODEL = "qwen3:8b"
+$env:MPLBACKEND = "Agg"      # no GUI needed for the benchmark
+```
+
+`run_visual.sh` is a shell script and is not run on Windows; the four worlds are
+checked headlessly by calling the unchanged `test_irsim_with_agent.py` directly
+for each world file.
+

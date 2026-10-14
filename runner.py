@@ -49,8 +49,15 @@ def run_simulation(decision_function=None):
 
 
 if __name__ == "__main__":
+    import sys
+
     ARTIFACTS.mkdir(exist_ok=True)
     report = run_simulation()
     path = ARTIFACTS / "simulation_report.json"
     path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(f"{report['passed_scenarios']}/{report['total_scenarios']} scenarios passed; {path}")
+    # A failing scenario must fail the command, otherwise a broken navigation
+    # logic would still report success to a caller or a CI job.
+    if report["failed_scenarios"]:
+        print(f"FAILED: {report['failed_scenarios']} scenario(s) did not produce the expected action")
+        sys.exit(1)

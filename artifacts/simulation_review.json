@@ -1,6 +1,6 @@
 {
-  "issue": "no",
-  "likely_cause": "no",
-  "recommendation": "no",
+  "issue": "No failed scenarios reported",
+  "likely_cause": "All scenarios passed successfully",
+  "recommendation": "No revisions needed as all scenarios were successful",
   "needs_revision": false
 }

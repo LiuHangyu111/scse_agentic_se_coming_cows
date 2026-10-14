@@ -14,9 +14,9 @@
       "action": "RIGHT"
     },
     {
-      "condition": "All directions are blocked or do not lead toward the goal",
+      "condition": "All directions are blocked or lead away from the goal",
       "action": "STOP"
     }
   ],
-  "stop_condition": "All movement directions are blocked or do not lead toward the goal"
+  "stop_condition": "All movement directions are blocked or lead away from the goal, and a safe stop is required"
 }
