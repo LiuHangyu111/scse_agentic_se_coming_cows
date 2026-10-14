@@ -85,9 +85,10 @@ QWEN_MODEL=qwen3:8b .venv/bin/python test_developer.py
 .venv/bin/python verify_tests_detect_bug.py
 ```
 
-The tests call `decide_next_move(state)` for all 64 combinations of six sensor
-flags, plus invalid inputs. The bug check runs the same tests against an
-isolated copy that wrongly returns `RIGHT` while right is blocked. The test
+The tests call `decide_next_move(state)` from `artifacts/navigation_logic.py`
+for all 64 combinations of six sensor flags, plus invalid inputs, and verify
+that it matches `generated/navigation_logic.py`. The bug check runs the same
+tests against an isolated copy that wrongly returns `RIGHT` while right is blocked. The test
 must fail, and the unmodified source must pass. Evidence is saved in
 `artifacts/testing_evidence.json`.
 

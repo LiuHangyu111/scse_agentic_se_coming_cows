@@ -9,7 +9,7 @@ import tempfile
 
 
 ROOT = Path(__file__).resolve().parent
-SOURCE = ROOT / "generated" / "navigation_logic.py"
+SOURCE = ROOT / "artifacts" / "navigation_logic.py"
 REPORT = ROOT / "artifacts" / "testing_evidence.json"
 MARKER = "def decide_next_move(state):\n"
 BUG = ("def decide_next_move(state):\n"

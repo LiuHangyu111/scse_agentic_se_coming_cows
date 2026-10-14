@@ -1,4 +1,4 @@
-"""Behavioral tests for the generated decide_next_move(state) entry point."""
+"""Behavioral tests for the saved decide_next_move(state) artifact."""
 
 import importlib.util
 import os
@@ -10,13 +10,19 @@ from runner import expected_action, scenarios
 
 
 ROOT = Path(__file__).resolve().parent
-MODULE_PATH = Path(os.environ.get(
-    "NAVIGATION_LOGIC_PATH", ROOT / "generated" / "navigation_logic.py"))
+ARTIFACT_PATH = ROOT / "artifacts" / "navigation_logic.py"
+GENERATED_PATH = ROOT / "generated" / "navigation_logic.py"
+MODULE_PATH = Path(os.environ.get("NAVIGATION_LOGIC_PATH", ARTIFACT_PATH))
 spec = importlib.util.spec_from_file_location("navigation_logic_under_test", MODULE_PATH)
 assert spec is not None and spec.loader is not None
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 decide_next_move = module.decide_next_move
+
+
+def test_generated_module_matches_navigation_artifact():
+    if "NAVIGATION_LOGIC_PATH" not in os.environ:
+        assert GENERATED_PATH.read_bytes() == ARTIFACT_PATH.read_bytes()
 
 
 @pytest.mark.parametrize("state", list(scenarios()))

@@ -1,59 +1,61 @@
-2026-10-14 17:06:41,495 INFO Orchestrator loaded brief.txt
-2026-10-14 17:06:42,154 INFO HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
-2026-10-14 17:06:42,158 INFO Saved artifacts/integration_requirements.json
-2026-10-14 17:06:42,159 INFO Analyst Agent created integration_requirements.json
-2026-10-14 17:06:42,985 INFO HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
-2026-10-14 17:06:42,986 WARNING Planner output failed semantic validation (strategy must describe a goal and obstacle safety.); using explicit safe plan
-2026-10-14 17:06:42,988 INFO Saved artifacts/integration_plan.json
-2026-10-14 17:06:42,988 INFO Planner Agent created integration_plan.json
-2026-10-14 17:06:43,778 INFO HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
-2026-10-14 17:06:43,781 WARNING Developer output failed behavior validation; using safe reference logic
-2026-10-14 17:06:43,785 INFO Developer Agent created integration_navigation_logic.py
-2026-10-14 17:06:43,787 INFO Developer Agent created generated/navigation_logic.py
-2026-10-14 17:06:43,788 INFO Developer Agent saved artifacts/navigation_logic.py
-2026-10-14 17:06:46,220 INFO HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
-2026-10-14 17:06:46,221 WARNING Test Agent draft failed validation (Test Agent must return plain non-empty Python code.); using exhaustive tests
-2026-10-14 17:06:46,223 INFO Test Agent created generated/test_navigation_agent.py
-2026-10-14 17:06:46,466 INFO Pytest exit=0: ........................................................................ [100%]
-72 passed in 0.02s
-2026-10-14 17:06:46,468 INFO Saved artifacts/simulation_report.json
-2026-10-14 17:06:46,468 INFO Simulation Runner passed 64/64 scenarios
-2026-10-14 17:06:46,865 INFO HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
-2026-10-14 17:06:46,869 INFO Saved artifacts/simulation_review.json
-2026-10-14 17:06:46,870 INFO Reviewer Agent reviewed simulation: revision=False
-2026-10-14 17:07:36,420 INFO IR-SIM benchmark created irsim_benchmark_report.json
-2026-10-14 17:07:36,421 INFO IR-SIM world=world_easy.yaml reached=True steps=150 efficiency=efficient error=None
-2026-10-14 17:07:36,421 INFO IR-SIM world=world_medium.yaml reached=True steps=148 efficiency=efficient error=None
-2026-10-14 17:07:36,421 INFO IR-SIM world=world_difficult.yaml reached=True steps=187 efficiency=efficient error=None
-2026-10-14 17:07:36,421 INFO IR-SIM world=world_custom.yaml reached=True steps=193 efficiency=efficient error=None
-2026-10-14 17:07:37,612 INFO HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
-2026-10-14 17:07:37,617 INFO Saved artifacts/irsim_benchmark_review.json
-2026-10-14 17:07:37,617 INFO Benchmark Reviewer finished: revision=False
-2026-10-14 17:07:37,619 INFO Saved artifacts/initial_simulation_report.json
-2026-10-14 17:07:37,619 INFO Saved artifacts/initial_irsim_benchmark_report.json
-2026-10-14 17:07:37,619 INFO Developer Agent starting revision from review notes and benchmark
-2026-10-14 17:07:39,378 INFO HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
-2026-10-14 17:07:39,382 INFO Developer Agent created generated/navigation_logic_revised.py
-2026-10-14 17:07:39,382 INFO Developer Agent created generated/navigation_logic.py
-2026-10-14 17:07:39,383 INFO Developer Agent saved artifacts/navigation_logic.py
-2026-10-14 17:07:41,736 INFO HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
-2026-10-14 17:07:41,737 WARNING Test Agent draft failed validation (Test Agent must return plain non-empty Python code.); using exhaustive tests
-2026-10-14 17:07:41,742 INFO Test Agent created generated/test_navigation_agent_revised.py
-2026-10-14 17:07:42,007 INFO Pytest exit=0: ........................................................................ [100%]
-72 passed in 0.02s
-2026-10-14 17:07:42,009 INFO Saved artifacts/simulation_report.json
-2026-10-14 17:07:42,009 INFO Simulation Runner passed 64/64 scenarios
-2026-10-14 17:07:42,344 INFO HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
-2026-10-14 17:07:42,345 INFO Saved artifacts/simulation_review.json
-2026-10-14 17:07:42,345 INFO Reviewer Agent reviewed simulation: revision=False
-2026-10-14 17:08:33,398 INFO IR-SIM benchmark created irsim_benchmark_report.json
-2026-10-14 17:08:33,399 INFO IR-SIM world=world_easy.yaml reached=True steps=150 efficiency=efficient error=None
-2026-10-14 17:08:33,399 INFO IR-SIM world=world_medium.yaml reached=True steps=148 efficiency=efficient error=None
-2026-10-14 17:08:33,399 INFO IR-SIM world=world_difficult.yaml reached=True steps=187 efficiency=efficient error=None
-2026-10-14 17:08:33,399 INFO IR-SIM world=world_custom.yaml reached=True steps=193 efficiency=efficient error=None
-2026-10-14 17:08:34,327 INFO HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
-2026-10-14 17:08:34,331 INFO Saved artifacts/irsim_benchmark_review.json
-2026-10-14 17:08:34,331 INFO Benchmark Reviewer finished: revision=False
-2026-10-14 17:08:34,332 INFO Revised navigation logic re-tested in all four IR-SIM worlds
-2026-10-14 17:08:34,336 INFO Saved artifacts/pipeline_summary.json
-2026-10-14 17:08:34,337 INFO Orchestrator finished: {'simulation_passed': True, 'safety_passed': True, 'goal_completion_passed': True, 'efficiency_passed': True, 'needs_revision': False}
+2026-10-14 17:38:37,303 INFO Orchestrator loaded brief.txt
+2026-10-14 17:38:37,965 INFO HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-10-14 17:38:37,966 INFO Saved artifacts/integration_requirements.json
+2026-10-14 17:38:37,966 INFO Analyst Agent created integration_requirements.json
+2026-10-14 17:38:38,818 INFO HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-10-14 17:38:38,819 WARNING Planner output failed semantic validation (strategy must describe a goal and obstacle safety.); using explicit safe plan
+2026-10-14 17:38:38,821 INFO Saved artifacts/integration_plan.json
+2026-10-14 17:38:38,821 INFO Planner Agent created integration_plan.json
+2026-10-14 17:38:39,675 INFO HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-10-14 17:38:39,678 WARNING Developer output failed behavior validation; using safe reference logic
+2026-10-14 17:38:39,680 INFO Developer Agent created integration_navigation_logic.py
+2026-10-14 17:38:39,682 INFO Developer Agent created generated/navigation_logic.py
+2026-10-14 17:38:39,683 INFO Developer Agent saved artifacts/navigation_logic.py
+2026-10-14 17:38:42,305 INFO HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-10-14 17:38:42,306 WARNING Test Agent draft failed validation (Test Agent must return plain non-empty Python code.); using exhaustive tests
+2026-10-14 17:38:42,308 INFO Test Agent created generated/test_navigation_agent.py
+2026-10-14 17:38:42,539 INFO Pytest exit=0: ........................................................................ [ 98%]
+.                                                                        [100%]
+73 passed in 0.02s
+2026-10-14 17:38:42,541 INFO Saved artifacts/simulation_report.json
+2026-10-14 17:38:42,541 INFO Simulation Runner passed 64/64 scenarios
+2026-10-14 17:38:42,941 INFO HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-10-14 17:38:42,942 INFO Saved artifacts/simulation_review.json
+2026-10-14 17:38:42,942 INFO Reviewer Agent reviewed simulation: revision=False
+2026-10-14 17:39:34,243 INFO IR-SIM benchmark created irsim_benchmark_report.json
+2026-10-14 17:39:34,244 INFO IR-SIM world=world_easy.yaml reached=True steps=150 efficiency=efficient error=None
+2026-10-14 17:39:34,244 INFO IR-SIM world=world_medium.yaml reached=True steps=148 efficiency=efficient error=None
+2026-10-14 17:39:34,244 INFO IR-SIM world=world_difficult.yaml reached=True steps=187 efficiency=efficient error=None
+2026-10-14 17:39:34,244 INFO IR-SIM world=world_custom.yaml reached=True steps=193 efficiency=efficient error=None
+2026-10-14 17:39:35,565 INFO HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-10-14 17:39:35,571 INFO Saved artifacts/irsim_benchmark_review.json
+2026-10-14 17:39:35,572 INFO Benchmark Reviewer finished: revision=False
+2026-10-14 17:39:35,575 INFO Saved artifacts/initial_simulation_report.json
+2026-10-14 17:39:35,576 INFO Saved artifacts/initial_irsim_benchmark_report.json
+2026-10-14 17:39:35,576 INFO Developer Agent starting revision from review notes and benchmark
+2026-10-14 17:39:37,400 INFO HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-10-14 17:39:37,408 INFO Developer Agent created generated/navigation_logic_revised.py
+2026-10-14 17:39:37,409 INFO Developer Agent created generated/navigation_logic.py
+2026-10-14 17:39:37,410 INFO Developer Agent saved artifacts/navigation_logic.py
+2026-10-14 17:39:39,978 INFO HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-10-14 17:39:39,982 WARNING Test Agent draft failed validation (Test Agent must return plain non-empty Python code.); using exhaustive tests
+2026-10-14 17:39:39,985 INFO Test Agent created generated/test_navigation_agent_revised.py
+2026-10-14 17:39:40,237 INFO Pytest exit=0: ........................................................................ [ 98%]
+.                                                                        [100%]
+73 passed in 0.02s
+2026-10-14 17:39:40,238 INFO Saved artifacts/simulation_report.json
+2026-10-14 17:39:40,238 INFO Simulation Runner passed 64/64 scenarios
+2026-10-14 17:39:40,569 INFO HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-10-14 17:39:40,571 INFO Saved artifacts/simulation_review.json
+2026-10-14 17:39:40,571 INFO Reviewer Agent reviewed simulation: revision=False
+2026-10-14 17:40:31,339 INFO IR-SIM benchmark created irsim_benchmark_report.json
+2026-10-14 17:40:31,341 INFO IR-SIM world=world_easy.yaml reached=True steps=150 efficiency=efficient error=None
+2026-10-14 17:40:31,341 INFO IR-SIM world=world_medium.yaml reached=True steps=148 efficiency=efficient error=None
+2026-10-14 17:40:31,341 INFO IR-SIM world=world_difficult.yaml reached=True steps=187 efficiency=efficient error=None
+2026-10-14 17:40:31,341 INFO IR-SIM world=world_custom.yaml reached=True steps=193 efficiency=efficient error=None
+2026-10-14 17:40:32,388 INFO HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2026-10-14 17:40:32,390 INFO Saved artifacts/irsim_benchmark_review.json
+2026-10-14 17:40:32,390 INFO Benchmark Reviewer finished: revision=False
+2026-10-14 17:40:32,390 INFO Revised navigation logic re-tested in all four IR-SIM worlds
+2026-10-14 17:40:32,390 INFO Saved artifacts/pipeline_summary.json
+2026-10-14 17:40:32,390 INFO Orchestrator finished: {'simulation_passed': True, 'safety_passed': True, 'goal_completion_passed': True, 'efficiency_passed': True, 'needs_revision': False}

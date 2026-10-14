@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-from developer_agent import build_navigation_module, run_developer
+from developer_agent import run_developer_module
 from planner_agent import validate_plan
 from testing_support import allow_local_ollama
 
@@ -17,9 +17,8 @@ GENERATED = ROOT / "generated" / "navigation_logic.py"
 def main() -> None:
     allow_local_ollama()
     plan = validate_plan(json.loads(INPUT.read_text(encoding="utf-8")))
-    # The agent validates navigate() and adds the required decide_next_move(state)
-    # entry point while retaining the original navigation function.
-    module = build_navigation_module(run_developer(plan))
+    # The agent retains navigate() and exposes decide_next_move(state).
+    module = run_developer_module(plan)
     OUTPUT.write_text(module, encoding="utf-8")
     GENERATED.parent.mkdir(exist_ok=True)
     GENERATED.write_text(module, encoding="utf-8")
