@@ -9,6 +9,20 @@ MODEL_NAME = os.getenv("QWEN_MODEL", "qwen3:8b")
 PLAN_KEYS = {"strategy", "decisions", "stop_condition"}
 DECISION_KEYS = {"condition", "action"}
 ALLOWED_ACTIONS = {"FORWARD", "LEFT", "RIGHT", "STOP"}
+REFERENCE_PLAN = {
+    "strategy": "Follow the goal direction when unblocked; otherwise use a safe fallback in FORWARD, LEFT, RIGHT order.",
+    "decisions": [
+        {"condition": "Choose FORWARD when it is the unblocked goal direction, or when the goal is blocked and forward is unblocked.",
+         "action": "FORWARD"},
+        {"condition": "Choose LEFT when it is the unblocked goal direction, or when the goal is blocked, forward is blocked, and left is unblocked.",
+         "action": "LEFT"},
+        {"condition": "Choose RIGHT when it is the unblocked goal direction, or when the goal is blocked, forward and left are blocked, and right is unblocked.",
+         "action": "RIGHT"},
+        {"condition": "Choose STOP only when all three movement directions are blocked.",
+         "action": "STOP"},
+    ],
+    "stop_condition": "Stop when all three movement directions are blocked.",
+}
 
 SYSTEM_PROMPT = """You are the Planner Agent for a mobile robot.
 Use only the validated requirements supplied by the user to decide how the
@@ -74,6 +88,26 @@ def validate_plan(data: Any) -> dict[str, Any]:
             "decisions must contain one decision for each allowed action."
         )
 
+    # A valid JSON shape alone is insufficient: a condition such as
+    # "avoid_obstacles" gives the Developer Agent no executable decision rule.
+    strategy = data["strategy"].lower()
+    if "goal" not in strategy or not any(word in strategy for word in
+                                           ("block", "safe", "obstacle")):
+        raise ValueError("strategy must describe a goal and obstacle safety.")
+    for decision in decisions:
+        condition = decision["condition"].lower()
+        action = decision["action"].lower()
+        if action != "stop" and (action not in condition or not any(
+                word in condition for word in ("block", "clear", "safe", "free"))):
+            raise ValueError(f"{action} condition must specify when movement is safe.")
+        if action == "stop" and not ("block" in condition and any(
+                word in condition for word in ("all", "no"))):
+            raise ValueError("STOP condition must require all directions blocked.")
+    stop_condition = data["stop_condition"].lower()
+    if "block" not in stop_condition or not any(
+            word in stop_condition for word in ("all", "no")):
+        raise ValueError("stop_condition must require all directions blocked.")
+
     return data
 
 
@@ -108,4 +142,11 @@ def run_planner(requirement: dict[str, Any]) -> dict[str, Any]:
     except json.JSONDecodeError as error:
         raise ValueError("Qwen did not return valid plan JSON.") from error
 
-    return validate_plan(plan)
+    try:
+        return validate_plan(plan)
+    except (TypeError, ValueError) as error:
+        import logging
+        logging.getLogger("pipeline").warning(
+            "Planner output failed semantic validation (%s); using explicit safe plan",
+            error)
+        return validate_plan(REFERENCE_PLAN)

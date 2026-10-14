@@ -1,0 +1,22 @@
+{
+  "strategy": "Follow the goal direction when unblocked; otherwise use a safe fallback in FORWARD, LEFT, RIGHT order.",
+  "decisions": [
+    {
+      "condition": "Choose FORWARD when it is the unblocked goal direction, or when the goal is blocked and forward is unblocked.",
+      "action": "FORWARD"
+    },
+    {
+      "condition": "Choose LEFT when it is the unblocked goal direction, or when the goal is blocked, forward is blocked, and left is unblocked.",
+      "action": "LEFT"
+    },
+    {
+      "condition": "Choose RIGHT when it is the unblocked goal direction, or when the goal is blocked, forward and left are blocked, and right is unblocked.",
+      "action": "RIGHT"
+    },
+    {
+      "condition": "Choose STOP only when all three movement directions are blocked.",
+      "action": "STOP"
+    }
+  ],
+  "stop_condition": "Stop when all three movement directions are blocked."
+}

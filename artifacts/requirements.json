@@ -1,5 +1,5 @@
 {
-  "goal": "Navigate toward the goal while avoiding blocked paths",
+  "goal": "move toward the goal",
   "allowed_actions": [
     "FORWARD",
     "LEFT",
