@@ -14,9 +14,9 @@
   },
   "mutant_test_exit_code": 1,
   "mutant_failed_as_expected": true,
-  "mutant_pytest_summary": "1 failed, 69 passed in 0.11s",
+  "mutant_pytest_summary": "1 failed, 69 passed in 0.14s",
   "original_test_exit_code": 0,
   "original_passed": true,
-  "original_pytest_summary": "70 passed in 0.06s",
+  "original_pytest_summary": "70 passed in 0.08s",
   "method": "Mutant was an isolated temporary copy; tracked navigation logic was unchanged"
 }

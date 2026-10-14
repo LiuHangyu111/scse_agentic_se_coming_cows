@@ -17,7 +17,6 @@ GENERATED = ROOT / "generated" / "navigation_logic.py"
 def main() -> None:
     allow_local_ollama()
     plan = validate_plan(json.loads(INPUT.read_text(encoding="utf-8")))
-    # The agent retains navigate() and exposes decide_next_move(state).
     module = run_developer_module(plan)
     OUTPUT.write_text(module, encoding="utf-8")
     GENERATED.parent.mkdir(exist_ok=True)

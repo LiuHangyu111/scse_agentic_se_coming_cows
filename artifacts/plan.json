@@ -1,22 +1,22 @@
 {
-  "strategy": "Navigate toward the goal while avoiding obstacles and ensuring safe movement",
+  "strategy": "Navigate toward the goal while avoiding blocked paths",
   "decisions": [
     {
-      "condition": "The forward direction is unblocked and leads toward the goal",
+      "condition": "The goal is in the forward direction and it is unblocked",
       "action": "FORWARD"
     },
     {
-      "condition": "The left direction is unblocked and leads toward the goal",
+      "condition": "The goal is in the left direction and it is unblocked",
       "action": "LEFT"
     },
     {
-      "condition": "The right direction is unblocked and leads toward the goal",
+      "condition": "The goal is in the right direction and it is unblocked",
       "action": "RIGHT"
     },
     {
-      "condition": "All directions are blocked or lead away from the goal",
+      "condition": "All directions are blocked or the goal is unreachable",
       "action": "STOP"
     }
   ],
-  "stop_condition": "All movement directions are blocked or lead away from the goal, and a safe stop is required"
+  "stop_condition": "All directions are blocked or the goal is unreachable"
 }

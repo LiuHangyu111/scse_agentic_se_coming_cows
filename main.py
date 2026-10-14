@@ -76,7 +76,6 @@ def validate_navigation(module_text, test_name):
 
 
 def main():
-    # Local Ollama must bypass macOS network proxies used by some Python clients.
     bypass = os.environ.get("NO_PROXY", "")
     os.environ["NO_PROXY"] = ",".join(part for part in
         (bypass, "127.0.0.1", "localhost") if part)
