@@ -1,40 +1,26 @@
-"""Level 1 smoke test for the Analyst Agent.
-
-Runs the real Analyst Agent on the original brief.txt and stores the validated
-result in artifacts/requirements.json, then displays it.
-"""
+"""Run the real Analyst Agent against the original brief (testing exercise)."""
 
 import json
 from pathlib import Path
 
-from analyst_agent import MODEL_NAME, run_analyst
+from analyst_agent import run_analyst, validate_requirements
+from testing_support import allow_local_ollama
 
 
-PROJECT_DIR = Path(__file__).resolve().parent
-BRIEF_FILE = PROJECT_DIR / "brief.txt"
-OUTPUT_FILE = PROJECT_DIR / "artifacts" / "requirements.json"
+ROOT = Path(__file__).resolve().parent
+OUTPUT = ROOT / "artifacts" / "requirements.json"
 
 
-def main() -> int:
-    print(f"Model under test: {MODEL_NAME}")
-    print(f"Input : {BRIEF_FILE.name}")
-
-    brief_text = BRIEF_FILE.read_text(encoding="utf-8")
-
-    # The agent's own validation accepts or rejects the model output here.
-    requirements = run_analyst(brief_text)
-
-    OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
-    with OUTPUT_FILE.open("w", encoding="utf-8") as output:
-        json.dump(requirements, output, ensure_ascii=False, indent=2)
-        output.write("\n")
-
-    print(f"Output: {OUTPUT_FILE.relative_to(PROJECT_DIR)}")
-    print("--- requirements.json ---")
-    print(json.dumps(requirements, ensure_ascii=False, indent=2))
-    print("RESULT: PASS - brief text turned into a usable requirements artifact")
-    return 0
+def main() -> None:
+    allow_local_ollama()
+    brief = (ROOT / "brief.txt").read_text(encoding="utf-8")
+    requirements = validate_requirements(run_analyst(brief))
+    OUTPUT.parent.mkdir(exist_ok=True)
+    OUTPUT.write_text(json.dumps(requirements, indent=2, ensure_ascii=False) + "\n",
+                      encoding="utf-8")
+    print(f"Validated Analyst Agent output: {OUTPUT.relative_to(ROOT)}")
+    print(OUTPUT.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    main()

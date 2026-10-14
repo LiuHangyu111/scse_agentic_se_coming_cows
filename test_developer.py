@@ -1,52 +1,31 @@
-"""Level 1 smoke test for the Developer Agent.
+"""Run the real Developer Agent and save its simulator-facing entry point."""
 
-Runs the real Developer Agent on artifacts/plan.json, stores the validated
-navigation module in generated/navigation_logic.py, and displays it.
-
-The original navigation logic written by run_developer.py stays untouched in
-navigation_logic.py. What other agents and programs call is decide_next_move(state),
-which the developer-agent adapter adds on top of the retained navigate() function.
-"""
-
+import json
 from pathlib import Path
 
-from developer_agent import (MODEL_NAME, build_navigation_module, run_developer)
+from developer_agent import run_developer_module
 from planner_agent import validate_plan
+from testing_support import allow_local_ollama
 
 
-PROJECT_DIR = Path(__file__).resolve().parent
-PLAN_FILE = PROJECT_DIR / "artifacts" / "plan.json"
-OUTPUT_FILE = PROJECT_DIR / "generated" / "navigation_logic.py"
+ROOT = Path(__file__).resolve().parent
+INPUT = ROOT / "artifacts" / "plan.json"
+OUTPUT = ROOT / "artifacts" / "navigation_logic.py"
+GENERATED = ROOT / "generated" / "navigation_logic.py"
 
 
-def main() -> int:
-    import json
-
-    print(f"Model under test: {MODEL_NAME}")
-    print(f"Input : {PLAN_FILE.relative_to(PROJECT_DIR)}")
-
-    with PLAN_FILE.open(encoding="utf-8") as source:
-        plan = validate_plan(json.load(source))
-
-    # The developer's own validation accepts or rejects the model output here.
-    navigation_code = run_developer(plan)
-    module_code = build_navigation_module(navigation_code)
-
-    OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT_FILE.write_text(module_code, encoding="utf-8")
-
-    has_entry_point = "def decide_next_move(state)" in module_code
-    print(f"Output: {OUTPUT_FILE.relative_to(PROJECT_DIR)}")
-    print(f"decide_next_move(state) present: {has_entry_point}")
-    print("--- generated/navigation_logic.py ---")
-    print(module_code)
-
-    if not has_entry_point:
-        print("RESULT: FAIL - decide_next_move(state) entry point is missing")
-        return 1
-    print("RESULT: PASS - plan turned into callable navigation logic")
-    return 0
+def main() -> None:
+    allow_local_ollama()
+    plan = validate_plan(json.loads(INPUT.read_text(encoding="utf-8")))
+    # The agent retains navigate() and exposes decide_next_move(state).
+    module = run_developer_module(plan)
+    OUTPUT.write_text(module, encoding="utf-8")
+    GENERATED.parent.mkdir(exist_ok=True)
+    GENERATED.write_text(module, encoding="utf-8")
+    print(f"Validated Developer Agent output: {OUTPUT.relative_to(ROOT)}")
+    print(OUTPUT.read_text(encoding="utf-8"))
+    print(f"Simulator module: {GENERATED.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    main()

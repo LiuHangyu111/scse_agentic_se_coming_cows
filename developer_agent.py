@@ -220,3 +220,8 @@ def run_developer(plan: dict[str, Any]) -> str:
         logging.getLogger("pipeline").warning(
             "Developer output failed behavior validation; using safe reference logic")
         return validate_code(REFERENCE_CODE)
+
+
+def run_developer_module(plan: dict[str, Any]) -> str:
+    """Return the Developer Agent's complete decide_next_move(state) module."""
+    return build_navigation_module(run_developer(plan))

@@ -1,41 +1,27 @@
-"""Level 1 smoke test for the Planner Agent.
-
-Runs the real Planner Agent on artifacts/requirements.json and stores the
-validated plan in artifacts/plan.json, then displays it.
-"""
+"""Run the real Planner Agent using the saved requirements artifact."""
 
 import json
 from pathlib import Path
 
-from planner_agent import MODEL_NAME, run_planner
+from analyst_agent import validate_requirements
+from planner_agent import run_planner, validate_plan
+from testing_support import allow_local_ollama
 
 
-PROJECT_DIR = Path(__file__).resolve().parent
-REQUIREMENTS_FILE = PROJECT_DIR / "artifacts" / "requirements.json"
-OUTPUT_FILE = PROJECT_DIR / "artifacts" / "plan.json"
+ROOT = Path(__file__).resolve().parent
+INPUT = ROOT / "artifacts" / "requirements.json"
+OUTPUT = ROOT / "artifacts" / "plan.json"
 
 
-def main() -> int:
-    print(f"Model under test: {MODEL_NAME}")
-    print(f"Input : {REQUIREMENTS_FILE.relative_to(PROJECT_DIR)}")
-
-    with REQUIREMENTS_FILE.open(encoding="utf-8") as source:
-        requirements = json.load(source)
-
-    # The planner's own validation accepts or rejects the model output here.
-    plan = run_planner(requirements)
-
-    OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
-    with OUTPUT_FILE.open("w", encoding="utf-8") as output:
-        json.dump(plan, output, ensure_ascii=False, indent=2)
-        output.write("\n")
-
-    print(f"Output: {OUTPUT_FILE.relative_to(PROJECT_DIR)}")
-    print("--- plan.json ---")
-    print(json.dumps(plan, ensure_ascii=False, indent=2))
-    print("RESULT: PASS - requirements artifact turned into a plan the developer can use")
-    return 0
+def main() -> None:
+    allow_local_ollama()
+    requirements = validate_requirements(json.loads(INPUT.read_text(encoding="utf-8")))
+    plan = validate_plan(run_planner(requirements))
+    OUTPUT.write_text(json.dumps(plan, indent=2, ensure_ascii=False) + "\n",
+                      encoding="utf-8")
+    print(f"Validated Planner Agent output: {OUTPUT.relative_to(ROOT)}")
+    print(OUTPUT.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    main()

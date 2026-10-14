@@ -1,0 +1,22 @@
+{
+  "mutation": "Return RIGHT while right is blocked and forward is safe",
+  "counterexample": {
+    "state": {
+      "front_blocked": false,
+      "left_blocked": true,
+      "right_blocked": true,
+      "goal_ahead": true,
+      "goal_on_left": false,
+      "goal_on_right": false
+    },
+    "expected": "FORWARD",
+    "mutant_actual": "RIGHT"
+  },
+  "mutant_test_exit_code": 1,
+  "mutant_failed_as_expected": true,
+  "mutant_pytest_summary": "1 failed, 69 passed in 0.11s",
+  "original_test_exit_code": 0,
+  "original_passed": true,
+  "original_pytest_summary": "70 passed in 0.06s",
+  "method": "Mutant was an isolated temporary copy; tracked navigation logic was unchanged"
+}

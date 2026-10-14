@@ -1,55 +1,50 @@
+"""Behavioral tests for the saved decide_next_move(state) artifact."""
+
+import importlib.util
+import os
+from pathlib import Path
+
 import pytest
 
-from navigation_logic import navigate
+from runner import expected_action, scenarios
 
 
-@pytest.mark.parametrize(
-    ("front_blocked", "left_blocked", "right_blocked", "goal_direction", "expected"),
-    [
-        # Goal is FORWARD and safe
-        (False, False, False, "FORWARD", "FORWARD"),
-        (False, True, True, "FORWARD", "FORWARD"),
-
-        # Goal is FORWARD but blocked; fall back in order: FRONT -> LEFT -> RIGHT
-        (True, False, False, "FORWARD", "LEFT"),
-        (True, True, False, "FORWARD", "RIGHT"),
-        (True, False, True, "FORWARD", "LEFT"),
-        (True, True, True, "FORWARD", "STOP"),
-
-        # Goal is LEFT and safe
-        (False, False, False, "LEFT", "LEFT"),
-        (True, False, True, "LEFT", "LEFT"),
-
-        # Goal is LEFT but blocked; fall back in order: FORWARD -> LEFT -> RIGHT
-        (False, True, False, "LEFT", "FORWARD"),
-        (True, True, False, "LEFT", "RIGHT"),
-        (False, True, True, "LEFT", "FORWARD"),
-        (True, True, True, "LEFT", "STOP"),
-
-        # Goal is RIGHT and safe
-        (False, False, False, "RIGHT", "RIGHT"),
-        (True, True, False, "RIGHT", "RIGHT"),
-
-        # Goal is RIGHT but blocked; fall back in order: FORWARD -> LEFT -> RIGHT
-        (False, False, True, "RIGHT", "FORWARD"),
-        (True, False, True, "RIGHT", "LEFT"),
-        (False, True, True, "RIGHT", "FORWARD"),
-        (True, True, True, "RIGHT", "STOP"),
-    ],
-)
-def test_navigate_decisions(
-    front_blocked: bool,
-    left_blocked: bool,
-    right_blocked: bool,
-    goal_direction: str,
-    expected: str,
-) -> None:
-    assert navigate(front_blocked, left_blocked, right_blocked, goal_direction) == expected
+ROOT = Path(__file__).resolve().parent
+ARTIFACT_PATH = ROOT / "artifacts" / "navigation_logic.py"
+GENERATED_PATH = ROOT / "generated" / "navigation_logic.py"
+MODULE_PATH = Path(os.environ.get("NAVIGATION_LOGIC_PATH", ARTIFACT_PATH))
+spec = importlib.util.spec_from_file_location("navigation_logic_under_test", MODULE_PATH)
+assert spec is not None and spec.loader is not None
+module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+decide_next_move = module.decide_next_move
 
 
-def test_goal_direction_priority_is_deterministic() -> None:
-    # If the goal direction is safe, it must be chosen before considering fallbacks.
-    assert navigate(True, False, False, "FORWARD") == "LEFT"
-    assert navigate(True, True, False, "LEFT") == "RIGHT"
-    assert navigate(True, True, False, "RIGHT") == "RIGHT"
-    assert navigate(False, True, True, "RIGHT") == "FORWARD"
+def test_generated_module_matches_navigation_artifact():
+    if "NAVIGATION_LOGIC_PATH" not in os.environ:
+        assert GENERATED_PATH.read_bytes() == ARTIFACT_PATH.read_bytes()
+
+
+@pytest.mark.parametrize("state", list(scenarios()))
+def test_every_known_perception_state(state):
+    action = decide_next_move(state)
+    assert action in {"FORWARD", "LEFT", "RIGHT", "STOP"}
+    assert action == expected_action(state)
+
+
+def test_goal_direction_is_used_when_safe():
+    state = dict(front_blocked=False, left_blocked=False, right_blocked=False,
+                 goal_ahead=False, goal_on_left=True, goal_on_right=False)
+    assert decide_next_move(state) == "LEFT"
+
+
+def test_stop_when_every_direction_is_blocked():
+    state = dict(front_blocked=True, left_blocked=True, right_blocked=True,
+                 goal_ahead=True, goal_on_left=False, goal_on_right=False)
+    assert decide_next_move(state) == "STOP"
+
+
+@pytest.mark.parametrize("state", [None, {}, {"front_blocked": "false"}])
+def test_invalid_sensor_input_is_rejected(state):
+    with pytest.raises((TypeError, ValueError)):
+        decide_next_move(state)

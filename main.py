@@ -34,6 +34,8 @@ def save_json(path, value):
 def validate_navigation(module_text, test_name):
     (GENERATED / "navigation_logic.py").write_text(module_text, encoding="utf-8")
     LOG.info("Developer Agent created generated/navigation_logic.py")
+    (ARTIFACTS / "navigation_logic.py").write_text(module_text, encoding="utf-8")
+    LOG.info("Developer Agent saved artifacts/navigation_logic.py")
     test_code = run_test_agent(
         json.loads((ARTIFACTS / "integration_requirements.json").read_text()),
         json.loads((ARTIFACTS / "integration_plan.json").read_text()), module_text)
